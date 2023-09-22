@@ -13,18 +13,15 @@ export default function SignupScreen({ navigation }) {
         <TextInput
           placeholder="Email"
           className="border p-2 border-yellow-200 bg-white"
-          textContentType="Email"
         />
         <TextInput
           placeholder="Password"
           className="border p-2 border-yellow-200 bg-white"
-          textContentType="Email"
           secureTextEntry={true}
         />
         <TextInput
           placeholder="Confirm Password"
           className="border p-2 border-yellow-200 bg-white"
-          textContentType="Email"
           secureTextEntry={true}
         />
         <TouchableOpacity className="items-center bg-yellow-200 py-3 rounded-lg">

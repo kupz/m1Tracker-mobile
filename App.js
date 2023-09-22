@@ -1,5 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import { ScrollView } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import * as React from "react";
