@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+
+import removeIcon from "../assets/removeIcon.png";
+import editIcon from "../assets/editIcon.png";
+import checkIcon from "../assets/checkIcon.png";
+
 import {
   View,
   Text,
@@ -6,16 +11,39 @@ import {
   TextInput,
   Button,
   ScrollView,
+  Image,
 } from "react-native";
 
 export default function BasicNeedsScreen() {
-  const [basicNeeds, setBasicNeeds] = useState([
-    { title: "sample1", budget: 100 },
-  ]);
+  const [basicNeeds, setBasicNeeds] = useState([]);
   const [modalActive, setModalActive] = useState(false);
-  const [newItem, setNewItem] = useState({
+
+  const itemTemplate = {
     title: "",
     budget: 0,
+    isDone: false,
+    remove: function () {
+      setBasicNeeds((prev) => {
+        return prev.filter((item) => {
+          return item.title !== this.title;
+        });
+      });
+    },
+    done: function () {
+      console.log(this.title);
+      setBasicNeeds((prev) =>
+        prev.map((item) => {
+          if (item.title === this.title) {
+            return { ...item, isDone: !item.isDone };
+          }
+          return item;
+        })
+      );
+    },
+  };
+
+  const [newItem, setNewItem] = useState({
+    ...itemTemplate,
   });
 
   const handleInputChange = (text, name) => {
@@ -36,13 +64,15 @@ export default function BasicNeedsScreen() {
     setBasicNeeds((prev) => {
       return [newItem, ...prev];
     });
-    setNewItem({});
+    setNewItem({ ...itemTemplate });
     setModalActive(false);
     console.log(basicNeeds);
   };
 
   const sumOfBasicNeeds = basicNeeds.reduce((accumulator, currentValue) => {
-    return accumulator + parseFloat(currentValue.budget);
+    return (
+      accumulator + (currentValue.isDone ? 0 : parseFloat(currentValue.budget))
+    );
   }, 0);
 
   console.log(sumOfBasicNeeds);
@@ -65,21 +95,51 @@ export default function BasicNeedsScreen() {
         {basicNeeds.length
           ? basicNeeds.map((item) => {
               return (
-                <TouchableOpacity
+                <View
                   key={item.title}
-                  className="flex-row justify-between p-3 bg-green-200 rounded-lg mt-2"
+                  className={`flex-row justify-between p-3  rounded-lg mt-2 items-center ${
+                    item.isDone ? "bg-green-300" : "bg-red-300"
+                  } `}
                 >
                   <Text className="font-medium text-slate-800">
                     {item.title}
                   </Text>
-                  <Text className="font-medium text-slate-800">
-                    {new Intl.NumberFormat().format(item.budget)}
-                  </Text>
-                </TouchableOpacity>
+
+                  <View className="flex-row gap-3">
+                    <Text className="font-medium text-slate-800">
+                      {new Intl.NumberFormat().format(item.budget)}
+                    </Text>
+                    <TouchableOpacity
+                      className="relative"
+                      onPress={() => item.remove()}
+                    >
+                      <Image
+                        source={removeIcon}
+                        style={{ width: 20, height: 20 }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity className="relative">
+                      <Image
+                        source={editIcon}
+                        style={{ width: 20, height: 20 }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="relative"
+                      onPress={() => item.done()}
+                    >
+                      <Image
+                        source={checkIcon}
+                        style={{ width: 20, height: 20 }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               );
             })
           : null}
       </ScrollView>
+
       <View className="flex-row p-3 justify-between bg-yellow-200 rounded-lg">
         <Text className="font-bold">Total</Text>
         <Text className="font-bold">

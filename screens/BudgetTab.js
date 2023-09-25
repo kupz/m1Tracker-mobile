@@ -21,6 +21,11 @@ export default function BudgetTab({ navigation }) {
       total: 3000,
       action: null,
     },
+    {
+      name: "Operating Cash",
+      total: 3000,
+      action: null,
+    },
   ];
   return (
     <>
