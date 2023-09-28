@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import m1Tracker from "../assets/m1TrackerLogo.png";
+// import useGetUsers from "../hooks/useGetUsers";
+import { useMutation, useQuery } from "react-query";
+import { getUsers, loginAccount } from "../api/newUsersApi";
 
 export default function HomeScreen({ navigation }) {
+  const data = { username: "kupz", password: "Password123" };
+
+  const users = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+  });
+
+  if (users.isLoading) {
+    console.log("users data fetching....");
+  } else {
+    console.log(users.data);
+  }
+
   return (
     <View className="bg-slate-800 min-h-full">
       <View className=" min-h-screen bg-slate-800 justify-center items-center gap-4 p-5">
